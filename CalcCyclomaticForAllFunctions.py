@@ -32,6 +32,21 @@ def get_functions_list():
         
     return func_list
 
+def top_n_complex(func_list, n):
+    sorted_func_list = sorted(
+        func_list, key=lambda elem: elem["complexity"], reverse=True
+    )
+    
+    return sorted_func_list[:n]
+
+def top_n_frequent(func_list, n):
+    sorted_func_list = sorted(
+        func_list, key=lambda elem: elem["frequency"], reverse=True
+    )
+    
+    return sorted_func_list[:n]
+    
+
 class ComplexFunction(AddressableRowObject):
     def __init__(
         self, function_name, location, complexity, frequency
@@ -83,31 +98,36 @@ def configure_table_columns(table_dialog):
 
 
 if __name__ == "__main__":
-#     regex = r'^((complexity|frequency+[<>=][0-9]+){1}(;(complexity|frequency)+[<>=][0-9]+){0,2})?'
-#     regex = re.compile(regex)
+    choices = [
+        "Show All",
+        "Show top 10 cyclomatically complex functions",
+        "Show top 10 frequently used functions",
+        "Show top 50 cyclomatically complex functions",
+        "Show top 50 frequently used functions"
+    ]
     
-#     choices = [
-#         "Show All"
-#         "Filter functions with a expression"
-#     ]
+    user_choice = askChoice("Choose One", "Select one", choices,1)
+    user_option = choices.index(user_choice)
     
-#     user_choice = askChoice("Choose One", "Select one", choices,1)
-#     user_option = choices.index(user_choice)
-    
-#     result = []
-    
-#     if user_choice == 0:
-#         number = askInt(user_choice, "Enter the 'n' value")
-        
-#     elif user_choice == 1:
-#         number = askInt(user_choice, "Enter the 'n' value")
-        
     result = get_functions_list()
     
+    if user_option == 1:
+        result = top_n_complex(result, 10)
+        
+    elif user_option == 2:
+        result = top_n_frequent(result, 10)
+        
+    elif user_option == 3:
+        result = top_n_complex(result, 50)
+        
+    elif user_option == 4:
+        result = top_n_frequent(result, 50)
+    
     table_dialog = createTableChooserDialog(
-        "Functions with Complexity and Frequency",
+        "Functions with Cyclomatic Complexity and Frequency",
         None,
     )
+    
     configure_table_columns(table_dialog)
     table_dialog.show()
     
