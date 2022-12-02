@@ -1,5 +1,4 @@
 try:
-    from typing import cast
     from ghidra_builtins import *
 except Exception as e:
     pass
@@ -7,17 +6,14 @@ except Exception as e:
 from ghidra.app.tablechooser import (
     AddressableRowObject,
     StringColumnDisplay,
-    TableChooserDialog,
 )
+
 from ghidra.program.util import CyclomaticComplexity
-import re
 
 
 def get_functions_list():
     
-    functions = currentProgram.getFunctionManager().getFunctions(
-        True
-    )
+    functions = currentProgram.getFunctionManager().getFunctions(True)
 
     func_list = []
     metric = CyclomaticComplexity()
@@ -110,7 +106,7 @@ if __name__ == "__main__":
     
     table_dialog = createTableChooserDialog(
         "Functions with Complexity and Frequency",
-        cast(TableChooserDialog, None),
+        None,
     )
     configure_table_columns(table_dialog)
     table_dialog.show()
